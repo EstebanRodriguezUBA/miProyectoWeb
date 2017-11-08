@@ -8,10 +8,14 @@
       <g:textField required="true" name="nombre" value="Ingrese email."/>
       </br>
       <label for="claveAcceso">Clave<span style="color:red">*</span></label>
-<!--    <g:textField required='true' name="claveAcceso" value="Ingrese  su clave alfanumerica."/> -->
-      <g:hiddenField required='true' name="claveAcceso" value="Ingrese  clave alfanumerica." />
+    <g:passwordField required='true' name="claveAcceso" value="Ingrese  su clave alfanumerica."/>
+      <!--<g:hiddenField required='true' name="claveAcceso" value="Ingrese  clave alfanumerica." />
+    -->
 <!--required es para que no deje vacio los campos al presionar boton-->
-      <g:submitButton name="ingresar" value="Iniciar Sesion"/>
+    <g:if test="${actionName != 'registrar'}">
+       <g:submitButton name="ingresar" value="Iniciar Sesion"/>
+    </g:if>
+
   </g:form>
  </fieldset>
 </div>

@@ -14,11 +14,12 @@
     <g:render template="/compartido/iniciadorTemplate" />
 
     <div id="registrar">
-      <g:form useToken="true" action="registrar">
-      <g:actionSubmit value="REGISTRARSE" controller='perfil' action="crearPerfil"/>
+      <g:form useToken="true" ><!--controller='perfil' action="crearPersona"-->
+      <g:actionSubmit value="REGISTRARSE" action ='registrar'/>
       </g:form>
     </div>
     <!--Errores en el ingreso -->
+    aqui llega beanError. El nombre es __${beanError?.nombre}__
     <g:render template="/compartido/errorTemplate" />
   </body>
 </html>

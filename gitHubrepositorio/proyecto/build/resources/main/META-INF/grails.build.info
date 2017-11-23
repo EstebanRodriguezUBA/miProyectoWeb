@@ -1,6 +1,6 @@
-#Wed, 08 Nov 2017 14:18:35 -0300
+#Sun, 12 Nov 2017 01:53:57 -0300
 
 info.app.version=0.1
 info.app.name=proyecto
-grails.env=development
+grails.env=production
 info.app.grailsVersion=3.3.1

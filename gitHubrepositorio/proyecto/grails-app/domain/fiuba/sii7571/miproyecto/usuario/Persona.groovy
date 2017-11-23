@@ -1,7 +1,9 @@
 package fiuba.sii7571.miproyecto.usuario
-import fiuba.sii7571.miproyecto.util.*
 
-class Persona {
+import fiuba.sii7571.miproyecto.util.*
+import fiuba.sii7571.miproyecto.factoria.Creable
+
+class Persona implements Creable{
   Rol rol
   Perfil perfil
   /**

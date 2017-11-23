@@ -1,9 +1,13 @@
 package fiuba.sii7571.miproyecto.usuario.informacion.profesional
 
-class Profesion {
-    String nombre
+import fiuba.sii7571.miproyecto.util.TituloProfesional
+import  fiuba.sii7571.miproyecto.factoria.Creable
+class Profesion implements Creable{
+    TituloProfesional tituloProfesional
+    //String nombre
 
-    Estudio institucionEducativa
+    Estudio estudio
     static constraints = {
+      estudio nullable:true
     }
 }

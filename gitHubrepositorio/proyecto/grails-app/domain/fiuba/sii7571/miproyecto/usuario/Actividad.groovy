@@ -3,10 +3,11 @@ import fiuba.sii7571.miproyecto.util.fecha.*
 
 class Actividad {
   Fecha fechaInscripto
-  Fecha fechaUltimoAcceso
-  Fecha fechaUltimoEgreso
-
-  static embedded = ['fechaInscripto','fechaUltimoAcceso','fechaUltimoEgreso']
+  RangoFecha ultimaSesion
+  Fecha inicioSesionActual
+  
+  //ultima publicacion?primera publicacion?
+  static embedded = ['fechaInscripto','ultimaSesion']
     static constraints = {
     }
 }

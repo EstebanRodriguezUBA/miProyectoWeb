@@ -4,7 +4,9 @@ import fiuba.sii7571.miproyecto.usuario.informacion.comunicacion.Contacto
 import fiuba.sii7571.miproyecto.usuario.informacion.ubicacion.Localizacion
 import fiuba.sii7571.miproyecto.usuario.informacion.publica.Presentacion
 
-class Perfil {
+import fiuba.sii7571.miproyecto.factoria.Creable
+
+class Perfil implements Creable{
 
   InformePersonal informePersonal
   Contacto contacto

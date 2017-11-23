@@ -4,7 +4,6 @@ class Direccion {
 
   String provincia
   String ciudad
-  String calle
   String barrio
     static constraints = {
     }

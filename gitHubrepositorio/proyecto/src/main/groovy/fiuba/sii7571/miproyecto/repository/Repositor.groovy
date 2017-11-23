@@ -1,7 +1,16 @@
 package fiuba.sii7571.miproyecto.repository
 
-class Repositor implements Repositorio{
+import fiuba.sii7571.miproyecto.factoria.Creable
 
+class Repositor implements Repositorio,Creable{
+
+
+  private static final Repositor repositor
+  private Repositor()
+
+  public static Repositor obtenerRepositor(){
+    repositor?:new Repositor()
+  }
   def obtener(Object id){
     "IMPLEMENTAR"
 }
@@ -17,10 +26,10 @@ class Repositor implements Repositorio{
   def borrar(Object entidad){
     "IMPLEMENTAR"
   }
-  def buscar(Object entidad,String nombrePropiedad_A,String nombrePropiedad_B,byte max){
-    entidad.findAllByNombreAndClaveAcceso(nombrePropiedad_A,nombrePropiedad_B,[max:max])
+  def buscar(def entidad,String nombrePropiedad_A,String nombrePropiedad_B,byte max){
+  // aqui aplicar un metodo mas general como consultas  where entidad.findAllByNombreAndClaveAcceso(nombrePropiedad_A,nombrePropiedad_B,[max:max])
   }
-  def buscar(Object entidad,String nombre,byte max){
+  def buscar(def entidad,String nombre,byte max){
     entidad.findAllByNombre(nombre,[max:max])
   }
 }

@@ -5,7 +5,9 @@ class Gasista extends Profesion{
     byte categoria
     int matricula
     String distribuidora
-    
+
     static constraints = {
     }
+
+    
 }

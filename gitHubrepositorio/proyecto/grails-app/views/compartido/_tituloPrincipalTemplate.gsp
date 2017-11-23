@@ -1,6 +1,3 @@
 <div id="tituloPrincipal">
- <fieldset> <!-- Recuadro-->
-  <legend>Encabezado</legend>
-  Este es el tItulo principal a determinar
- </fieldset>
-</div>
+<strong>Mi proyecto de gasss...BOOOM</strong>
+ </div>

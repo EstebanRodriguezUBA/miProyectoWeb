@@ -7,21 +7,31 @@ class BootStrap {
     def init = { servletContext ->
 
     Cuenta.count()?:crearCuentasTemporales()
-/*
-    new Cuenta (nombre:"miproyecto@fiuba.org",claveAcceso:"012345678").save(failOnError: true)
-*/
+
   }
   private crearCuentasTemporales = {
-    def iniciador = new Iniciador(new Email("miproyecto@fiuba.org.ar"),new ClaveSecreta("012345678"))
+    Texto email = Texto.obtener("miproyecto@fiuba.org.ar")
+    Texto claveSecreta = Texto.obtener("012345678")
+    def iniciador = new Iniciador(nombreAcceso:email,claveAcceso:claveSecreta)
   def primerCuenta = new Cuenta (iniciador:iniciador)
 
     primerCuenta.save(failOnError: true)
 
-    def segundaCuenta = new Cuenta (iniciador:new Iniciador(new Email("miproyecto@gmail.com"),new ClaveSecreta("01234"))
-     segundaCuenta.save(failOnError: true)
+    def segundaCuenta = new Cuenta (iniciador:new Iniciador(nombreAcceso: Texto.obtener("miproyecto@gmail.com"),claveAcceso:Texto.obtener("01234")))
 
-    def terceraCuenta = new Cuenta (iniciador:new Iniciador(new Email("miproyecto@fiuba.org"),new ClaveSecreta("01234"))
-     terceraCuenta.save(failOnError: true)
+    segundaCuenta.save(failOnError: true)
+
+    def terceraCuenta = new Cuenta (iniciador:new Iniciador(nombreAcceso: Texto.obtener("miproyecto@fiuba.org"),claveAcceso:Texto.obtener("01234")))
+
+    terceraCuenta.save(failOnError: true)
+
+    println "BOOTSTRAP ____________________"
+    Cuenta.list().each {
+      println "${it.dump()}"
+      println "INICIADOR: ${it.iniciador?.dump()}"
+  }
+    println "Cuentas: ${Cuenta.count()}"
+    println "***************BOOOTSTRAPP"
   }
 
     def destroy = {

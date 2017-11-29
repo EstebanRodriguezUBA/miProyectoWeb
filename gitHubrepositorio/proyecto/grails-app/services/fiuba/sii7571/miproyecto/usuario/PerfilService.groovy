@@ -5,16 +5,18 @@ import fiuba.sii7571.miproyecto.usuario.informacion.comunicacion.*
 import fiuba.sii7571.miproyecto.usuario.informacion.ubicacion.Localizacion
 import fiuba.sii7571.miproyecto.usuario.informacion.ubicacion.localizacion.*
 import fiuba.sii7571.miproyecto.usuario.informacion.profesional.*
-import fiuba.sii7571.miproyecto.usuario.informacion.publica.Presentacion
-import fiuba.sii7571.miproyecto.util.*
-import fiuga.sii7571.miproyecto.factoria.usuario.PerfilFactoria
-import fiuga.sii7571.miproyecto.factoria.usuario.ProfesionFactoria
+import fiuba.sii7571.miproyecto.usuario.informacion.publica.presentacion.Presentacion
+
+import fiuba.sii7571.miproyecto.factoria.usuario.PerfilFactoria
+import fiuba.sii7571.miproyecto.factoria.usuario.ProfesionFactoria
+import fiuba.sii7571.miproyecto.factoria.usuario.GasistaFactoria
+
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class PerfilService {
     static scope ='session'
-**********************************CAMBIAR FACTORIA!!
+/**********************************CAMBIAR FACTORIA!!
     Persona crearUsuario(informePersonal,
       contacto,
       localizacion,
@@ -30,41 +32,42 @@ class PerfilService {
       usuario?.validate()
       usuario
     }
-    InformePersonal determinarInformePersonal(InformePersonalComando cmd){
+*/
+    InformePersonal determinarInformePersonal(InformePersonalCommand cmd){
 
       //validar genero
       //def genero = PerfilFactoria.crearGenero(cmd.genero)
-      def informePersonal = PerfilFactoria.crearInformePersonal(cmd.properties)
+      def informePersonal = PerfilFactoria.crearInformePersonal(cmd.nombre,cmd.apellido,cmd.nacionalidad,cmd.nativo,cmd.genero)
       //informePersonal.genero = genero
 
       informePersonal
 
     }
 
-    def determinarContacto(ContactoComando cmd){
+    def determinarContacto(ContactoCommand cmd){
       //validar telefonos
-      def celular = PerfilFactoria.crearTelefono (codigoRegional:cmd.celular_codigoRegional,numero:cmd.celular_numero)
-      def fijo    = PerfilFactoria.crearTelefono (codigoRegional:cmd.residencial_codigoRegional,numero:cmd.residencial_numero)
+      def celular = PerfilFactoria.crearTelefono (cmd.celular_codigoRegional,cmd.celular_numero)
+      def fijo    = PerfilFactoria.crearTelefono (cmd.residencial_codigoRegional,cmd.residencial_numero)
       def otroTelefono = cmd.otroTelefono
-      def contacto = PerfilFactoria.crearContacto (celular:celular,fijo:fijo,otroTelefono:otroTelefono)
+      def contacto = PerfilFactoria.crearContacto (celular,fijo,otroTelefono)
 
       contacto
     }
 
-    def determinarLocalizacion(LocalizacionComando cmd){
+    def determinarLocalizacion(LocalizacionCommand cmd){
       //validar direccion
-      def direccion = PerfilFactoria.crearDireccion (cmd.properties)
-      def localizacion = PerfilFactoria.crearLocalizacion (direccion:direccion)
+      def direccion = PerfilFactoria.crearDireccion (cmd.provincia,cmd.ciudad,cmd.barrio)
+      def localizacion = PerfilFactoria.crearLocalizacion (direccion)
 
       localizacion
     }
 
-    def determinarProfesion(ProfesionComando cmd){
+    def determinarProfesion(ProfesionCommand cmd){
 
       null
 
     }
-    def detallarProfesionGasista(ProfesionGasistaComando cmd){
+    def detallarProfesionGasista(ProfesionGasistaCommand cmd){
       //Se que es gasista
 
         //Estudio aun no fue completado por usuario
@@ -74,7 +77,7 @@ class PerfilService {
         return gasista
 
     }
-    def detallarEstudios(EstudioComando cmd){
+    def detallarEstudios(EstudioCommand cmd){
 
       def estudio = ProfesionFactoria.crearEstudio(cmd.properties)
       estudio

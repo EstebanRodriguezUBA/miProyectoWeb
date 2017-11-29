@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%! import fiuba.sii7571.miproyecto.util.tituloProfesional.TituloProfesional %>
 <html>
   <head>
       <title><g:render template="/compartido/tituloPrincipalTemplate" /></title>
@@ -11,7 +12,8 @@
     <g:render template="/compartido/mensajeTemplate" />
 
     <g:form  action="determinarProfesion">
-      <g:select name="tituloProfesional" from="${TituloProfesional.values()}" optionKey="key" value="${profesion?.tituloProfesional?.key}"/>
+
+      <g:select name="tituloProfesional" from="${TituloProfesional?.values()}" optionKey="nombre" value="{tituloProfesional?.nombre}"/>
 
       <g:submitButton name="Confirmar y continuar" value="Continuar"/>
 

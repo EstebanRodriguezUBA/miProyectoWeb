@@ -1,10 +1,11 @@
 package fiuba.sii7571.miproyecto.factoria.cuenta
 
 import  fiuba.sii7571.miproyecto.factoria.Factoria
+import  fiuba.sii7571.miproyecto.factoria.Creable
 import  fiuba.sii7571.miproyecto.cuenta.Cuenta
 import fiuba.sii7571.miproyecto.cuenta.Iniciador
 import fiuba.sii7571.miproyecto.usuario.*
-import fiuba.sii7571.miproyecto.util.texto.*
+import fiuba.sii7571.miproyecto.util.texto.Texto
 
 class CuentaFactoria  extends Factoria{
 
@@ -28,16 +29,12 @@ class CuentaFactoria  extends Factoria{
   Creable obtener(){
     cuenta
   }
-  static Iniciador crearIniciador(Email nombreAcceso,ClaveSecreta claveAcceso){
-    new Iniciador(nombreAcceso, claveAcceso)
+  static Iniciador crearIniciador(Texto nombreAcceso,Texto claveAcceso){
+    new Iniciador(nombreAcceso:nombreAcceso, claveAcceso:claveAcceso)
   }
-  static Actividdad CrearActividad(){
+  static Actividad CrearActividad(){
     null
   }
-  static Email crearEmail (String email){
-    new Email(email)
-  }
-  static ClaveSecreta crearClaveSecreta(String claveSecreta){
-    new ClaveSecreta(claveSecreta)
-  }
+
+
 }

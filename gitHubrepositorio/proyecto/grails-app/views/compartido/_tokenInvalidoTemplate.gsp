@@ -1,4 +1,3 @@
-Token Invalido
 <%--"NO SE PUEDE COLOCAR ASI g:render template="/compartido/tokenInvalidoTemplate" />" --%>
 <g:if test="${flash.invalidToken}">
 <g:message code="${flash.invalidToken}"/>

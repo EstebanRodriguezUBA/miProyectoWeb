@@ -1,6 +1,11 @@
 package fiuba.sii7571.miproyecto.factoria.usuario
+
 import  fiuba.sii7571.miproyecto.factoria.Factoria
-import  fiuba.sii7571.miproyecto.usuario.*
+import  fiuba.sii7571.miproyecto.factoria.Creable
+import  fiuba.sii7571.miproyecto.usuario.Persona
+import  fiuba.sii7571.miproyecto.usuario.Perfil
+import  fiuba.sii7571.miproyecto.util.rol.Rol
+
 
 class PersonaFactoria  extends Factoria{
 
@@ -10,7 +15,7 @@ class PersonaFactoria  extends Factoria{
     persona = new Persona()
 
   }
-  boolean configurar(Rol:rol,Perfil:perfil){
+  boolean configurar(Rol rol,Perfil perfil){
     persona?{
 
       persona.rol = rol

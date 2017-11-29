@@ -6,3 +6,4 @@ abstract class Factoria {
 
     abstract def crear()
     //abstract def configurar()
+}

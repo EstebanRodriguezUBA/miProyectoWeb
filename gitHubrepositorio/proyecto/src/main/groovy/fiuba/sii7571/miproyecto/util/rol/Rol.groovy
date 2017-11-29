@@ -1,4 +1,4 @@
-package fiuba.sii7571.miproyecto.util.Rol
+package fiuba.sii7571.miproyecto.util.rol
 
 enum Rol {
   ADMINISTRADOR('Administrador del sistema'),

@@ -3,32 +3,35 @@ package fiuba.sii7571.miproyecto.cuenta
 import fiuba.sii7571.miproyecto.cuenta.CuentaController
 import fiuba.sii7571.miproyecto.repository.cuenta.CuentaRepositorio
 import fiuba.sii7571.miproyecto.consultorio.Consultor
-import fiuba.sii7571.miproyecto.util.texto.
+import fiuba.sii7571.miproyecto.util.texto.Texto
+import fiuba.sii7571.miproyecto.factoria.cuenta.CuentaFactoria
+
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class CuentaService {
     static scope ='session'
 
-*************Cambiar COMANDO
-  Comando iniciarSesion (Comando cmd){
+  Cuenta verificarUnicidadCuenta(IniciadorComando cmd) {
+    
+    Consultor.obtener(CuentaRepositorio.obtenerRepositor())?.buscarCuentaPorNombreAcceso(cmd.nombreAcceso)
+  }
+  Cuenta verificarExisteCuenta (IniciadorComando cmd){
     /*Nota: en controlador, en comando evaluo correcto DataBinding y aplica validate a las propiedades importando los constrains correspondientes
     Entonces aqui mismo, verifico: si existe la cuenta, retornarla, sino null
     */
-    Consultor consultor = new Consultor()
-    consultor.setearRepositor(CuentaRepositorio.obtenerRepositor())
+    Iniciador iniciador = this.crearIniciadorCuenta(cmd)
 
-    cmd.instanciaRetornada = consultor?.buscarCuentaUsuario(new Iniciador(new Email (cmd.nombre),new ClaveSecreta(cmd.claveAcceso)))
-    if (cmd.Cuenta){
-      cmd.mensaje = "Bienvenido: iniciando su sesión..."
-    }else{
-        cmd.mensaje = "No existe esa cuenta. Verifique lo ingresado."
-      }
+    Consultor.obtener(CuentaRepositorio.obtenerRepositor())?.buscarCuentaPorIniciador(iniciador)
 
-    cmd
   }
+  Iniciador crearIniciadorCuenta(IniciadorComando cmd){
 
-
+    Texto email = Texto.obtener(cmd.nombreAcceso)
+    Texto claveSecreta = Texto.obtener(cmd.claveAcceso)
+    Iniciador iniciador = CuentaFactoria.crearIniciador(email,claveSecreta)
+    iniciador
+    }
     def serviceMethod() {
 
     }

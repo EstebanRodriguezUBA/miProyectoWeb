@@ -1,46 +1,65 @@
 package fiuba.sii7571.miproyecto.cuenta
 import fiuba.sii7571.miproyecto.consultorio.Consultor
-import fiuba.sii7571.miproyecto.factoria.repositorio.RepositorFactoria
 import fiuba.sii7571.miproyecto.util.texto.*
+import fiuba.sii7571.miproyecto.cuenta.Iniciador
 
+import grails.gorm.DetachedCriteria
 
 class CuentaController {
 
   def cuentaService
-  Consultor consultor = new Consultor()
+  String msgInvalido = "Ingreso incorrecto. Verifique."
+  String mensaje_1 ="NO EXISTE UN USUARIO CON ESA INFORMACION.VERIFIQUE. "
+  String mensaje_2 = "[Accion: ${actionName}, Controlador:${controllerName}] "
+
 
   def index(){
-    flash.message = "Usted esta siendo redirigido a inicio()"
-    render view:'iniciarSesion'
+    flash.message = mensaje_2
+    render view:'iniciarSesionVista'
 
   }
   def inicio(){
     render "Esta es la vista de escape de prueba.Testing invalidToken"
   }
 
-  //corregir :falta comando.
-  def registrar(falta_IniciadorcomandoCorregido){
-    render "Esta es la pantalla de registracion, en construccion"
-    render "REGISTRACION:Total cuentas:${Cuenta.count()} hasta el momento"
-
-    cuentaService.validarCorregir(params)?.hasErrors()?{
-      registrador ->
-      render (view:'registrar', model:[bean:registrador,nombreAccion:${actionName}])
-    }:
-    {
-        Consultor consultor = new Consultor()
-        consultor.setearRepositor(CuentaRepositorio.obtenerRepositor())
-
-        consultor?.buscarCuentaPorIniciador(new Iniciador(new Email (params.nombre),new ClaveSecreta(params.claveAcceso)))?{
-          cuentaEncontrada ->
-          flash.message = "Ya existe un usuario con ese mail. Elija otro."
-          redirect view:'registrar'
-        }:
-        {
-          flash.message = "Felicitaciones. Creando cuenta..."
-        }
-    }
+  def iniciarRegistracionUsuario(){
+    flash.message = "Fecha:${new Date()}"
+    render view:'registrarUsuarioVista'
   }
+
+  def registrarUsuario(IniciadorComando cmd){
+    //render "Esta es la pantalla de registracion, en construccion"
+    //render "Total usuarios registrados:${Cuenta.count()}"
+    //render "Fecha:${new Date()}"
+
+    if (cmd.hasErrors() || !cmd.validate() ){
+      //errores de tipo DataBinding y constraints
+
+      flash.message = "Fecha:${new Date()}"
+      flash.hayErrores = msgInvalido
+
+      render (view:'registrarUsuarioVista', model:[beanError:cmd])
+      return
+    }
+    Cuenta cuentaEncontrada = cuentaService.verificarUnicidadCuenta(cmd)
+      if (cuentaEncontrada){
+
+        flash.message = "Ya existe ese usuario. Elija otro."
+        render view:'registrarUsuarioVista'
+        return
+      }
+      flash.message = "Felicitaciones. Creando cuenta..."
+      Iniciador iniciador = cuentaService.crearIniciadorCuenta(cmd)
+
+      if(!iniciador ){
+        flash.message = "Error creando Iniciador de acceso a cuenta nueva.[Iniciador: datos para creacion:${cmd?.toString()}]"
+        render view:'registrarUsuarioVista'
+        return
+      }
+      //se redirige a que complete los formularios con su perfil
+      session.iniciador = iniciador
+      redirect (controller:'Perfil', action:'iniciarRegistracion')
+}
   /**
   Nota:
   Se suspende el empleo de useToken, entonces no es necesario .withForm
@@ -49,35 +68,28 @@ class CuentaController {
   Se emplea en casos críticos. Ejemplo comprar (compra dos veces), depositar (deposita dos veces).
   */
   def iniciarSesion(IniciadorComando cmd){
-    /**
-    *
-    Nota:IniciadorComando implementa Validateable
-    */
 
-    //corregir
-    IniciadorComan cmd = cuentaService.iniciarSesion(cmd_Corregir)
-
-    cmd?:{render "Algo salio mal: accion $actionName -- controlador $controlName"
-    return}
-
-    String msg =''
-
-    if (cmd.instanciaRetornada){
-      render "${cmd.mensaje}. Info cuenta: ${cmd.instanciaRetornada.dump()}"
-      return
-    }else{
-
-      println "ERROR VALIDACION ${cmd.instancia.dump()}"
-      msg    = cmd.mensaje
-      flash.message = msg
-      flash.hayErrores = msg + "Fecha:${new Date()}"
-
-      render (view:'iniciarSesion', model: [beanError:cmd.instancia])
-
+    if (cmd.hasErrors() || !cmd.validate() ){
+      flash.message = "Fecha:${new Date()}"
+      flash.hayErrores = msgInvalido
+      render (view:'iniciarSesionVista', model: [beanError:cmd])
       return
     }
-    render "algo salio mal ---${cmd.dump()}---"
-    return
+    Cuenta cuentaEncontrada = cuentaService.verificarExisteCuenta(cmd)
+
+    if(cuentaEncontrada){
+      render "Bienvenido de nuevo a su sesion"
+      session.cuenta = cuentaEncontrada
+      render (view:'menuPrincipalUsuarioVista', model:[cuenta:session.cuenta])
+      return
+    }
+
+    String mensaje_3 =" [Mail:${cmd?.nombreAcceso}, claveSecreta:${cmd?.claveAcceso}]"
+
+    flash.message = mensaje_1 + "Fecha:${new Date()}"
+    flash.hayErrores = mensaje_2 + mensaje_3
+    render view:'iniciarSesionVista'
+
 
 }
 
@@ -85,7 +97,7 @@ class CuentaController {
     session.cuenta = null
     render "Sesion Finalizada. Los esperamos nuevamente."
   }
-/****************************************************************/
+
 /**
 *Interceptor: La referencia al metodo, .& ,para convertirlo en closure
 */
@@ -103,32 +115,29 @@ class IniciadorComando {
 
   def instanciaRetornada=null
 
-  static static constraints = {
-    /***Grails NO SOPORTA validaciOn en cascada,sino es con un plugin de versiones anteriores.
-    Considerar definir global constraints, shared constraints.
-    **/
-    //importFrom Iniciador  no sirve
-    //importFrom Email      no sirve
-    //importFrom ClaveSecreta no sirve
-    nombreAcceso blank:false, email:true,validator:{nombre,esteObjeto->
-      def encontrado = null
+  /***Grails NO SOPORTA validaciOn en cascada,sino es con un plugin de versiones anteriores.
+  Considerar definir global constraints, shared constraints.
+  **/
+  //importFrom Iniciador  no sirve
 
-      Email email = CuentaFactoria.crearEmail(nombre)
-      ClaveSecreta claveSecreta = CuentaFactoria.crearClaveSecreta(esteObjeto.claveAcceso)
-      Iniciador iniciador = CuentaFactoria.crearIniciador(email,claveSecreta)
+   static constraints = {
 
-      encontrado = (new Consultor()?.CuentaRepositorio.obtenerRepositor()?.buscarCuentaPorIniciador(iniciador) == null)
-
-      encontrado
+    nombreAcceso blank:false, email:true
+    /* Si utilizo este validator entro en conflicto entre registrar e iniciarSesion al querer reutilizarlo
+    ,validator:{nombre->
+      //evaluo que el nombre acceso sea unico
+      //unique true falla con excepcion, asi sea correcto o no
+      boolean consulta =(Cuenta.where{ iniciador.nombreAcceso.contenido == nombre} == null)
+      consulta
     }
-      claveAcceso size: 4..25, blank:false, matches:'[A-Za-z0-9_]+',validator: { clave, esteObjeto->
-      boolean igualados = true
-      igualados  = clave.compareTo(esteObjeto.nombreAcceso)? true:false
-      igualados
+    */
+    claveAcceso size: 4..25, blank:false, matches:'[A-Za-z0-9_]+',validator: { clave, esteObjeto->
+    boolean igualados = true
+    igualados  = clave.compareTo(esteObjeto.nombreAcceso)? true:false
+    igualados
     }
 
-
-
+    instanciaRetornada nullable:true
   }
 
 

@@ -2,7 +2,7 @@ package fiuba.sii7571.miproyecto.usuario
 import fiuba.sii7571.miproyecto.usuario.informacion.personal.InformePersonal
 import fiuba.sii7571.miproyecto.usuario.informacion.comunicacion.Contacto
 import fiuba.sii7571.miproyecto.usuario.informacion.ubicacion.Localizacion
-import fiuba.sii7571.miproyecto.usuario.informacion.publica.Presentacion
+import fiuba.sii7571.miproyecto.usuario.informacion.publica.presentacion.Presentacion
 
 import fiuba.sii7571.miproyecto.factoria.Creable
 

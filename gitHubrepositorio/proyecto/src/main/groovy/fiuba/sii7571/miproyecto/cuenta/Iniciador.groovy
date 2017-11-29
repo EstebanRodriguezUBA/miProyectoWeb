@@ -1,52 +1,40 @@
 package fiuba.sii7571.miproyecto.cuenta
 
-import fiuba.sii7571.miproyecto.util.texto.Email
-import fiuba.sii7571.miproyecto.util.texto.ClaveSecreta
-
+import fiuba.sii7571.miproyecto.util.texto.Texto
+import grails.validation.Validateable
 //Consultar: Lo que se recupera de la base de datos precisa ser validado?
 
 class Iniciador implements Validateable{
   /**
-  *RegistraciOn-acceso a sesiOn de usuario
+  *RegistraciOn-acceso a sesiOn de usuario.
   */
   //nombreAcceso es un mail. Unico por usuario.
-  Email nombreAcceso
+  Texto nombreAcceso
   //claveAcceso distinta mail de acceso.
-  ClaveSecreta claveAcceso
+  Texto claveAcceso
 
-    static constraints = {
-      //que no sean iguales
-      nombreAcceso validator:{nombre,esteObjeto->
-        /*NOTA:ATENCION!!!
-        PARA BUSCAR POR OBJETO EMBEBIDO CON DINAMIC FINDER TIENEN QUE *COINCIDIR TODaAS SUS PROPIEDADES O FALLA
-        Alternativa precisa, usar where query
-        def consulta=Cuenta.where{ iniciador.nombre == ini.nombre}
-        println consulta.dump()
-        println consulta.list().dump()
-        println consulta.list([max:1]).head().dump()
-        */
+  static embedded = ['nombreAcceso','claveAcceso']
 
-        //unicidad OK
-        boolean encontrado = true
-        //Temporal.usar repositor
-        encontrado = (Cuenta.findByIniciador(esteObjeto) == null)
-        encontrado
-      }
+  static constraints = {
 
       claveAcceso validator: { clave, esteObjeto->
-      //  clave notEqual: nombre. No funciona (probado antes de encapsular Strings)
+
       //retorna cero si son iguales compareTo() OK
+      println "Estoy en validator:${esteObjeto?.toString()}"
+      println "----${esteObjeto?.claveAcceso?.contenido} ----- ${esteObjeto?.nombreAcceso?.contenido}"
+      println "${esteObjeto?.dump()}"
         boolean igualados = true
-        igualados  = clave?.contenido.compareTo(esteObjeto.nombreAcceso.contenido)? true:false
+        igualados  = clave?.contenido?.compareTo(esteObjeto?.nombreAcceso?.contenido)? true:false
+        println "Resultado validator ${igualados}_****"
         igualados
       }
-
-
-
     }
 }
 /**
-NotePersonal: Fuente:Applying Validation to Other Classes
+*NotaPersonal:NO se puede componer, en el sentido de Grails, embedded, clases con propiedades final. No funciona. No compone.
+*/
+/**
+NotaPersonal: Fuente:Applying Validation to Other Classes
 
 Domain classes and Command Objects support validation by default. Other classes may be made validateable by defining the static constraints property in the class (as described above) and then telling the framework about them. It is important that the application register the validateable classes with the framework. Simply defining the constraints property is not sufficient.
 The Validateable Trait

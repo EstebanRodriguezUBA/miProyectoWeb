@@ -5,9 +5,9 @@ class Actividad {
   Fecha fechaInscripto
   RangoFecha ultimaSesion
   Fecha inicioSesionActual
-  
+
   //ultima publicacion?primera publicacion?
-  static embedded = ['fechaInscripto','ultimaSesion']
+  static embedded = ['fechaInscripto','ultimaSesion','inicioSesionActual']
     static constraints = {
     }
 }

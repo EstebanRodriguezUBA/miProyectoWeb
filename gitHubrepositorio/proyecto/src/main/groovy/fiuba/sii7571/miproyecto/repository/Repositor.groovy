@@ -5,12 +5,7 @@ import fiuba.sii7571.miproyecto.factoria.Creable
 class Repositor implements Repositorio,Creable{
 
 
-  private static final Repositor repositor
-  private Repositor()
-
-  public static Repositor obtenerRepositor(){
-    repositor?:new Repositor()
-  }
+  
   def obtener(Object id){
     "IMPLEMENTAR"
 }

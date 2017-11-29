@@ -20,7 +20,7 @@
     <g:textField required='false' name="residencial_codigoRegional" value="${contacto?.residencial?.codigoRegional}"/>
     </br>
     <label for="residencial_numero">Número</label>
-    <g:textField required='false' name="residencial_numero" value="${contacto?.residencial.numero}"/>
+    <g:textField required='false' name="residencial_numero" value="${contacto?.residencial?.numero}"/>
     </br>
 
     <p>Otro teléfono de contacto</p>

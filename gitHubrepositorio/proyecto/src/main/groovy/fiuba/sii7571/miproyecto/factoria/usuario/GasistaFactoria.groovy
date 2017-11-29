@@ -1,5 +1,9 @@
+package fiuba.sii7571.miproyecto.factoria.usuario
+
 import  fiuba.sii7571.miproyecto.factoria.Factoria
-import  fiuba.sii7571.miproyecto.usuario.*
+import  fiuba.sii7571.miproyecto.factoria.Creable
+import  fiuba.sii7571.miproyecto.usuario.informacion.profesional.Estudio
+import  fiuba.sii7571.miproyecto.util.tituloProfesional.TituloProfesional
 
 class GasistaFactoria  extends ProfesionFactoria{
 

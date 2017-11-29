@@ -1,5 +1,9 @@
-import  fiuba.sii7571.miproyecto.factoria.Factoria
-import  fiuba.sii7571.miproyecto.usuario.*
+package  fiuba.sii7571.miproyecto.factoria.usuario
+
+import  fiuba.sii7571.miproyecto.factoria.*
+import  fiuba.sii7571.miproyecto.usuario.informacion.profesional.Estudio
+import  fiuba.sii7571.miproyecto.usuario.informacion.profesional.Profesion
+import  fiuba.sii7571.miproyecto.util.tituloProfesional.TituloProfesional
 
 class ProfesionFactoria  extends Factoria{
 

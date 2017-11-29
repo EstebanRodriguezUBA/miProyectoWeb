@@ -15,10 +15,10 @@ class Cuenta implements Creable {
   /**
   *ComposiciOn
   */
-  static embedded = ['persona','actividadCuenta','iniciador']
+  static embedded = ['iniciador','persona','actividadCuenta']
 
     static constraints = {
-    
+
       persona nullable:true
       actividadCuenta nullable:true
 
